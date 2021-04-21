@@ -34,7 +34,8 @@ namespace DadJokeMVC.Controllers
 
         public JsonResult Search(string searchText) {
 
-            var results = this.dadJokeAPIService.SearchByText(searchText);
+            var results = this.dadJokeAPIService.SearchByText(searchText);    
+            
             return Json(results); 
         }
     }

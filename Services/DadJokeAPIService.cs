@@ -60,6 +60,8 @@ namespace DadJokeMVC.Services
                         if (result.IsSuccessStatusCode)
                         {
                             pagedDadJokeResponse = JsonConvert.DeserializeObject<PagedDadJokeResponse>(result.Content.ReadAsStringAsync().Result);
+                          
+                            pagedDadJokeResponse.Results = CapitalizeSearchTermInResults(pagedDadJokeResponse.Results, text);                            
                         }
                     }
                 }
@@ -69,6 +71,25 @@ namespace DadJokeMVC.Services
                 this.logger.Log(LogLevel.Information, ex.Message);
             }
             return pagedDadJokeResponse;
+        }
+
+        private DadJokeSearchResult[] CapitalizeSearchTermInResults(DadJokeSearchResult[] dadJokes, string searchTerm) {
+
+            var jokesWithUppercaseSearchTerm = from d in dadJokes
+                            from word in d.Joke.Split(' ')
+                            where string.Equals(word, searchTerm, StringComparison.OrdinalIgnoreCase)
+                            select d.Joke.Replace(word, word.ToUpper());
+
+            foreach (var originalDadJoke in dadJokes)
+            { 
+                foreach(var updatedDadJoke in jokesWithUppercaseSearchTerm)
+                {
+                    originalDadJoke.Joke = updatedDadJoke;
+                }               
+            }
+
+            return dadJokes;
+
         }
     }
 }
