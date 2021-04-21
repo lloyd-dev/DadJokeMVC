@@ -45,9 +45,30 @@ namespace DadJokeMVC.Services
             return dadJokeResponse;
         }
 
-        public async Task<IEnumerable<DadJoke>> SearchByText(string text)
+        public async Task<PagedDadJokeResponse> SearchByText(string text)
         {
-            throw new NotImplementedException();
+            PagedDadJokeResponse pagedDadJokeResponse = null;
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "Lloyd needs a new job"); //icanhazdadjoke wants people to set a custome user agent
+                    using (var result = httpClient.GetAsync(string.Format(baseUrl + "/search?term={0}", text)).Result)
+                    {
+                        if (result.IsSuccessStatusCode)
+                        {
+                            pagedDadJokeResponse = JsonConvert.DeserializeObject<PagedDadJokeResponse>(result.Content.ReadAsStringAsync().Result);
+                        }
+                    }
+                }
+            }
+            catch (Newtonsoft.Json.JsonException ex)
+            {
+                this.logger.Log(LogLevel.Information, ex.Message);
+            }
+            return pagedDadJokeResponse;
         }
     }
 }

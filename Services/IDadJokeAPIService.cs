@@ -8,7 +8,7 @@ namespace DadJokeMVC.Services
 {
     public interface IDadJokeAPIService
     {
-        public Task<IEnumerable<DadJoke>> SearchByText(string text);
+        public Task<PagedDadJokeResponse> SearchByText(string text);
         public Task<DadJoke> GetRandom();
     }
 }
