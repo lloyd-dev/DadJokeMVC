@@ -63,7 +63,7 @@ namespace DadJokeMVC.Services
                           
                             pagedDadJokeResponse.Results = CapitalizeSearchTermInResults(pagedDadJokeResponse.Results, text);
 
-                            pagedDadJokeResponse.Results.OrderBy(l => l.Joke.Length);
+                            pagedDadJokeResponse.Results = pagedDadJokeResponse.Results.OrderBy(l => l.Joke.Split(' ').Length).ToArray();
                         }
                     }
                 }
