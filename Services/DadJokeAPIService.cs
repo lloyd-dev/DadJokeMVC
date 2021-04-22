@@ -75,20 +75,16 @@ namespace DadJokeMVC.Services
 
         private DadJokeSearchResult[] CapitalizeSearchTermInResults(DadJokeSearchResult[] dadJokes, string searchTerm) {
 
-            var jokesWithUppercaseSearchTerm = from d in dadJokes
-                            from word in d.Joke.Split(' ')
-                            where string.Equals(word, searchTerm, StringComparison.OrdinalIgnoreCase)
-                            select d.Joke.Replace(word, word.ToUpper());
+            var jokesWithUppercaseSearchTerm = (from d in dadJokes
+                                                from word in d.Joke.Split(' ')
+                                                where string.Equals(word, searchTerm, StringComparison.OrdinalIgnoreCase)
+                                                let joke = d.Joke.Replace(word, word.ToUpper())
+                                                select new DadJokeSearchResult { 
+                                                Id = d.Id,
+                                                Joke = joke
+                                                }).ToArray();            
 
-            foreach (var originalDadJoke in dadJokes)
-            { 
-                foreach(var updatedDadJoke in jokesWithUppercaseSearchTerm)
-                {
-                    originalDadJoke.Joke = updatedDadJoke;
-                }               
-            }
-
-            return dadJokes;
+            return jokesWithUppercaseSearchTerm;
 
         }
     }
