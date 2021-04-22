@@ -44,7 +44,7 @@
                 $("#search-results").html("");
                 var resultsContent = "";
                 for (var i = 0; i < response.result.results.length; i++)  {
-                    resultsContent += "<div id='result[" + i + "]'>" + response.result.results[i].joke + "</div><br/>";
+                    resultsContent += "<div id='result[" + i + "]'>" + (i+1) +". " + response.result.results[i].joke + "</div><br/>";
 
                 };
                 $("#search-results").append(resultsContent);
