@@ -1,22 +1,15 @@
 ﻿using DadJokeMVC.Services;
 using DadJokeMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DadJokeMVC.Controllers
 {
     public class DadJokeController : Controller
     {
         private readonly IDadJokeAPIService dadJokeAPIService;
-        private readonly ILogger<DadJokeController> logger;
         
-        public DadJokeController(IDadJokeAPIService dadJokeAPIService, ILogger<DadJokeController> logger) {
+        public DadJokeController(IDadJokeAPIService dadJokeAPIService) {
             this.dadJokeAPIService = dadJokeAPIService;
-            this.logger = logger;
         }
 
 
