@@ -1,8 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<h1>Dad Jokes! </h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div id="random-joke-area">
+    <label>Generate a random dad joke</label>
+    <button id="random-joke-button">random</button>
+    <h1 id="joke-text"></h1>
 </div>
+
+<div id="joke-search-area">
+   
+    <button id="search-button">search for a dad joke</button>
+    <input type="text" id="search-box" />
+</div>
+<br/>
+
+<div id="search-results">
+
+</div>
+<
+<script type="text/javascript">
+    $("#random-joke-button").on("click", function () {
+
+        $.ajax({
+            url: "/dadjoke/random",
+            type: "GET",
+            success: function (data) {
+                $("#joke-text").html(data)
+            }
+        })
+
+    })
+
+    $("#search-button").on("click", function () {
+
+        $.ajax({
+            url: "/dadjoke/search",
+            data: {
+                searchText: $("#search-box").val()
+            },
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                $("#search-results").html("");
+                var resultsContent = "";
+                for (var i = 0; i < response.result.results.length; i++)  {
+                    resultsContent += "<div id='result[" + i + "]'>" + response.result.results[i].joke + "</div><br/>";
+
+                };
+                $("#search-results").append(resultsContent);
+
+            }
+        });
+
+
+    });                   
+</script>
