@@ -45,7 +45,7 @@ namespace DadJokeMVC.Services
             return dadJokeResponse;
         }
 
-        public async Task<PagedDadJokeResponse> SearchByText(string text)
+        public async Task<PagedDadJokeResponse> SearchByText(string text, int limit = 30, int page = 1)
         {
             PagedDadJokeResponse pagedDadJokeResponse = null;
             try
@@ -55,7 +55,7 @@ namespace DadJokeMVC.Services
 
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     httpClient.DefaultRequestHeaders.Add("User-Agent", "Lloyd needs a new job"); //icanhazdadjoke wants people to set a custome user agent
-                    using (var result = httpClient.GetAsync(string.Format(baseUrl + "/search?term={0}", text)).Result)
+                    using (var result = httpClient.GetAsync(string.Format(baseUrl + "/search?term={0}&limit={1}&page={2}", text, limit, page)).Result)
                     {
                         if (result.IsSuccessStatusCode)
                         {

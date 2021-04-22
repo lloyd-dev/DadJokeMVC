@@ -26,15 +26,18 @@ namespace DadJokeMVC.Controllers
 
             return View("DadJokeHome", viewmodel);
         }
+
+        // in case I don't get to finish the view stuff, navigate to this endpoint @ /dadjoke/random
         public JsonResult Random() {
 
             var randomJoke = this.dadJokeAPIService.GetRandom();           
             return Json(randomJoke.Result.Joke);
         }
 
-        public JsonResult Search(string searchText) {
+        // in case I don't get to finish the view stuff, navigate to this endpoint @ /dadjoke/search?searchText=
+        public JsonResult Search(string searchText, int limit = 30, int page = 1) {
 
-            var results = this.dadJokeAPIService.SearchByText(searchText);    
+            var results = this.dadJokeAPIService.SearchByText(searchText, limit, page);    
             
             return Json(results); 
         }
