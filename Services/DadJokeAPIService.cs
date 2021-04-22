@@ -61,7 +61,9 @@ namespace DadJokeMVC.Services
                         {
                             pagedDadJokeResponse = JsonConvert.DeserializeObject<PagedDadJokeResponse>(result.Content.ReadAsStringAsync().Result);
                           
-                            pagedDadJokeResponse.Results = CapitalizeSearchTermInResults(pagedDadJokeResponse.Results, text);                            
+                            pagedDadJokeResponse.Results = CapitalizeSearchTermInResults(pagedDadJokeResponse.Results, text);
+
+                            pagedDadJokeResponse.Results.OrderBy(l => l.Joke.Length);
                         }
                     }
                 }
@@ -73,19 +75,21 @@ namespace DadJokeMVC.Services
             return pagedDadJokeResponse;
         }
 
-        private DadJokeSearchResult[] CapitalizeSearchTermInResults(DadJokeSearchResult[] dadJokes, string searchTerm) {
+        private DadJokeSearchResult[] CapitalizeSearchTermInResults(DadJokeSearchResult[] dadJokes, string searchTerm) {            
 
-            var jokesWithUppercaseSearchTerm = (from d in dadJokes
-                                                from word in d.Joke.Split(' ')
-                                                where string.Equals(word, searchTerm, StringComparison.OrdinalIgnoreCase)
-                                                let joke = d.Joke.Replace(word, word.ToUpper())
-                                                select new DadJokeSearchResult { 
-                                                Id = d.Id,
-                                                Joke = joke
-                                                }).ToArray();            
+            foreach (var joke in dadJokes)
+            {
+                var jokesentence = joke.Joke.Split(' ');
+                foreach (var word in jokesentence)
+                {
+                    if (string.Equals(word, searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        joke.Joke = joke.Joke.Replace(word, word.ToUpper());
+                    }
+                }
+            }
 
-            return jokesWithUppercaseSearchTerm;
-
-        }
+            return dadJokes;
+        }       
     }
 }
